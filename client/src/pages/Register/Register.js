@@ -14,13 +14,14 @@ const Register = () => {
       body: JSON.stringify({name,username,password}),
       headers: {'Content-Type': 'application/json'},
     })
-
-    let res = await response.json();
+    console.log(response.status)
+    // let res = await response.json();
+    // console.log(res)
     setUsername('');
     setName('');
     setPassword('');
 
-    if(res.status !== 200){
+    if(response.status !== 200){
       toast.error('There are some errors here. Please do try again.', {
         position: "top-left",
         autoClose: 3000,
