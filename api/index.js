@@ -3,14 +3,18 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const { default: mongoose } = require('mongoose');
 const app = express();
-app.use(cors());
+app.use(cors({credentials:true,origin:'http://localhost:3000'}));
+
 require('dotenv').config();
 app.use(express.json());
+const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 
 const User = require('./models/User');
 
 const salt = bcrypt.genSaltSync(10);
+const secret = 'asdjfsadgfhgadfadfjhasdjk';
+// const secret = process.env.SECRET_KEY;
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3zndhpn.mongodb.net/?retryWrites=true&w=majority`)
 
@@ -36,11 +40,16 @@ app.post('/register', async(req,res)=>{
 app.post('/login',async (req,res)=>{
     const {username,password} = req.body;
     const userDoc = await User.findOne({username});
+    // res.json(userDoc);
     const passOk = bcrypt.compareSync(password, userDoc.password);
     if(passOk){
         //user logged in
+        jwt.sign({username,id:userDoc._id},secret,{},(error,token)=>{
+            if(error) throw error;
+            res.cookie('token',token).json('Jwt okay')
+        })
     }else{
         res.status(400).json('Wrong Credentials')
     }
 })
-app.listen(port,()=>(console.log('Blog website Database is running.')));
+app.listen(port,()=>(console.log('Blog website Database is running')));
