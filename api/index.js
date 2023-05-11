@@ -3,20 +3,23 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const { default: mongoose } = require('mongoose');
-const app = express();
-app.use(cors({credentials:true,origin:'http://localhost:3000'}));
-app.use(cookieParser());
-
+const multer = require('multer');
 require('dotenv').config();
-app.use(express.json());
+const uploadMiddleware = multer({dest:'uploads/'});
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 
+const app = express();
 const User = require('./models/User');
-
+const Post = require('./models/Post');
 const salt = bcrypt.genSaltSync(10);
 const secret = 'asdjfsadgfhgadfadfjhasdjk';
 // const secret = process.env.SECRET_KEY;
+
+app.use(cors({credentials:true,origin:'http://localhost:3000'}));
+app.use(cookieParser());
+app.use(express.json());
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3zndhpn.mongodb.net/?retryWrites=true&w=majority`)
 
@@ -60,10 +63,28 @@ app.post('/login',async (req,res)=>{
 app.get('/profile',(req,res)=>{
     const {token} = req.cookies;
     jwt.verify(token,secret,{},(error,info)=>{
-        if(error) throw err;
+        if(error) throw error;
         res.json(info);
     });
 });
+
+app.post('/post',uploadMiddleware.single('file'), async (req,res)=>{
+    const {originalname,path} = req.file;
+    const parts = originalname.split('.');
+    const ext = parts[parts.length - 1];
+    const newPath = path+'.'+ext;
+    fs.renameSync(path,newPath);
+
+    const {title,summary,content} = req.body;
+    const postDoc = await Post.create({
+        title,
+        summary,
+        content,
+        cover:newPath,
+    })
+    res.json(postDoc);
+    // res.json({files:req.file});
+})
 
 app.post('/logout',(req,res)=>{
     res.cookie('token','').json('ok logged out');

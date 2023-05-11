@@ -22,18 +22,33 @@ const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
+  const [files,setFiles] = useState('');
+
+  const createNewPost = async (event) =>{
+    event.preventDefault();
+
+    const data = new FormData();
+    data.set('title',title);
+    data.set('summary',summary);
+    data.set('content',content);
+    data.set('file',files[0]);
+    const response = await fetch("http://localhost:5000/post",{
+      method: "POST",
+      body:data,
+    });
+    await response.json()
+  }
 
   return (
     <div className="mt-5">
       <h1 className="text-2xl mx-3 my-3">
         Speak Your Mind! Create your post here.
       </h1>
-      <form>
+      <form onSubmit={createNewPost}>
         <input
           className="w-full mx-3 my-3 py-2 px-2 border bg-gray-100 rounded"
           type="title"
           placeholder={"Title"}
-          value={title}
           onChange={event => setTitle(event.target.value)}
         />
         <input
@@ -46,6 +61,8 @@ const CreatePost = () => {
         <input
           className="w-full mx-3 my-3 py-2 px-2 border bg-gray-100 rounded"
           type="file"
+          // value={files}
+          onChange={event => setFiles(event.target.files)}
         />
         <ReactQuill
           value={content}
