@@ -20,6 +20,7 @@ const secret = 'asdjfsadgfhgadfadfjhasdjk';
 app.use(cors({credentials:true,origin:'http://localhost:3000'}));
 app.use(cookieParser());
 app.use(express.json());
+app.use('/uploads',express.static(__dirname + '/uploads'));
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3zndhpn.mongodb.net/?retryWrites=true&w=majority`)
 
