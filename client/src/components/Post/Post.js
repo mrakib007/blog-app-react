@@ -1,7 +1,8 @@
 import React from 'react';
 import {formatISO9075} from 'date-fns';
+import { Link } from 'react-router-dom';
 
-const Post = ({title,summary,cover,content,createdAt,author}) => {
+const Post = ({_id,title,summary,cover,content,createdAt,author}) => {
   console.log(cover
     )
     return (
@@ -20,8 +21,7 @@ const Post = ({title,summary,cover,content,createdAt,author}) => {
       <time className='text-grey-500 text-lg'>{formatISO9075(new Date(createdAt))}</time>
       <p class="mb-8 leading-relaxed">{summary}</p>
       <div class="flex justify-center">
-        <button class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
-        <button class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Button</button>
+        <Link to={`/post/${_id}`} class="btn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Read Full Blog</Link>
       </div>
     </div>
   </div>
