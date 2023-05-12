@@ -3,7 +3,7 @@ import { formatISO9075 } from "date-fns";
 import { Link } from "react-router-dom";
 
 const Post = ({ _id, title, summary, cover, content, createdAt, author }) => {
-  console.log(cover);
+  
   return (
     <section class="text-gray-600 body-font">
       <div class="container mx-auto flex px-5 py-20 md:flex-row flex-col items-center">

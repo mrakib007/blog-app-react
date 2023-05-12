@@ -13,7 +13,6 @@ const PostPage = () => {
       .then((res) => res.json())
       .then((postInfo) => setPostInfo(postInfo));
   }, []);
-  console.log(postInfo);
   if (!postInfo) {
     return "";
   }
