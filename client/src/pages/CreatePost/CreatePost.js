@@ -5,22 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline','strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      ['clean']
-    ],
-  };
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image'
-  ];
+import Editor from "../Editor/Editor";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -114,12 +99,13 @@ const CreatePost = () => {
           // value={files}
           onChange={event => setFiles(event.target.files)}
         />
-        <ReactQuill
+        {/* <ReactQuill
           value={content}
           modules={modules}
           formats={formats}
           className="mx-3 w-full"
-          onChange={newValue => setContent(newValue)} />
+          onChange={newValue => setContent(newValue)} /> */}
+        <Editor value={content} onChange={setContent}/>
         <button className="bg-indigo-200 w-full rounded py-2 my-3 mx-3">
           Create Post
         </button>
