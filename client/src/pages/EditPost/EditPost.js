@@ -10,7 +10,7 @@ const EditPost = () => {
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState("");
-  //   const [cover,setCover] = useState('');
+    const [cover,setCover] = useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,14 +20,14 @@ const EditPost = () => {
   useEffect(() => {
     // fetch("http://localhost:5000/post/"+id)
     fetch(`http://localhost:5000/post/${id}`)
-      .then((res) => res.json())
-      .then((postInfo) => {
+      .then(res => res.json())
+      .then(postInfo => {
         console.log(postInfo)
         setTitle(postInfo.title);
         setContent(postInfo.content);
         setSummary(postInfo.summary);
       });
-  });
+  },[]);
 
   const updatePost = async (event) => {
     event.preventDefault();
@@ -35,7 +35,7 @@ const EditPost = () => {
     data.set("title", title);
     data.set("summary", summary);
     data.set("content", content);
-    data.set('id',id);
+    data.set("id",id);
     if (files?.[0]) {
       data.set("file", files?.[0]);
     }
